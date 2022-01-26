@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "my first Python NFT minter"
+version = "0.1.0"
+description = "Build smart contract whitelist"
+authors = ["Prem Chotepanit <prem.chotepanit@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+eth-brownie = "1.17.0"
+web3 = "5.24.0"
+py-solc-x = "1.1.1"
+python-dotenv = "0.16.0"
+vyper = {version="0.3.0", python="3.8"}
+autopep8 = "^1.6.0"
+pip = "^21.3.1"
+
+[tool.poetry.dev-dependencies]
+tox = "^3.24.5"
+pre-commit = "^2.16.0"
+black = "21.9b0"
+jupyter = "^1.0.0"
+flake8 = "^4.0.1"
+flake8-docstrings = "^1.6.0"
+pycodestyle_magic = "^0.5"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

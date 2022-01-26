@@ -1,0 +1,69 @@
+dependencies:
+  - smartcontractkit/chainlink-brownie-contracts@0.2.1
+  - OpenZeppelin/openzeppelin-contracts@4.2.0
+  - nomiclabs/hardhat@1.3.3
+  - aave/protocol-v2@1.0.1
+
+compiler:
+  solc:
+    remappings:
+      - "@chainlink=smartcontractkit/chainlink-brownie-contracts@0.2.1"
+      - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.2.0"
+      - "@hardhat=nomiclabs/hardhat@1.3.3"
+      - "@aave=aave/protocol-v2@1.0.1"
+dotenv: .env
+wallet:
+  from_key: ${OWNER_PRIVATE_KEY}
+
+networks:
+  default: development
+  kovan:
+    weth_token: "0xd0a1e359811322d97991e03f863a0c30c2cf029c"
+    lending_pool_addresses_provider: "0x88757f2f99175387ab4c6a4b3067c77a695b0349"
+    dai_eth_price_feed: "0x22B58f1EbEDfCA50feF632bD73368b2FdA96D541"
+    dai_token: "0xFf795577d9AC8bD7D90Ee22b6C1703490b6512FD"
+    fau_token: "0xFab46E002BbF0b4509813474841E0716E6730136"
+    dai_usd_price_feed: "0x777A68032a88E5A84678A77Af2CD65A7b3c0775a"
+    eth_usd_price_feed: "0x9326BFA02ADD2366b30bacB125260Af641031331"
+    verify: True
+  mainnet-fork:
+    weth_token: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+    lending_pool_addresses_provider: "0xB53C1a33016B2DC2fF3653530bfF1848a515c8c5"
+    # https://data.chain.link/ethereum/mainnet/stablecoins/dai-eth
+    dai_eth_price_feed: "0x773616E4d11A78F511299002da57A0a94577F1f4"
+    dai_token: "0x6b175474e89094c44da98b954eedeac495271d0f"
+    eth_usd_price_feed: "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419"
+    verify: False
+  mainnet-fork-5:
+    weth_token: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+    lending_pool_addresses_provider: "0xB53C1a33016B2DC2fF3653530bfF1848a515c8c5"
+    # https://data.chain.link/ethereum/mainnet/stablecoins/dai-eth
+    dai_eth_price_feed: "0x773616E4d11A78F511299002da57A0a94577F1f4"
+    dai_token: "0x6b175474e89094c44da98b954eedeac495271d0f"
+    eth_usd_price_feed: "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419"
+    verify: False
+  development:
+    keyhash: "0x2ed0feb3e7fd2022120aa84fab1945545a9f2ffc9076fd6156fa96eaff4c1311"
+    fee: 0.1e18
+    link_token: "0x01BE23585060835E02B77ef475b0Cc51aA1e0709"
+    verify: False
+  rinkeby:
+    fee: 0.1e18
+    vrf_coordinator: "0xb3dCcb4Cf7a26f6cf6B120Cf5A73875B7BBc655B"
+    keyhash: "0x2ed0feb3e7fd2022120aa84fab1945545a9f2ffc9076fd6156fa96eaff4c1311"
+    # Token
+    link_token: "0x01BE23585060835E02B77ef475b0Cc51aA1e0709"
+    weth_token: "0xc778417e063141139fce010982780140aa0cd5ab"
+    dai_token: "0x95b58a6bff3d14b7db2f5cb5f0ad413dc2940658"
+    # Feed
+    dai_eth_price_feed: "0x2bA49Aaa16E6afD2a993473cfB70Fa8559B523cF"
+    eth_usd_price_feed: "0x8A753747A1Fa494EC906cE90E9f37563A8AF630e"
+    lending_pool_addresses_provider: "0xAe0f23a1d500Aa0DDd45EbCB203EF3e29B5e780f"
+    verify: True
+  mainnet-fork-dev:
+    eth_usd_price_feed: "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419"
+    verify: False
+  ganache-local:
+    verify: False
+  ganache-local-2:
+    verify: False
