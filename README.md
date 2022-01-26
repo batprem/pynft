@@ -121,10 +121,9 @@ print(os.popen("brownie networks list").read())
 
 
 ```python
-NETWORK = "rinkeby"
-# network.connect(NETWORK) # Main net fork
-# network.connect(NETWORK) # Main net
-network.connect(NETWORK) # Test net rinkeby
+NETWORK = "mainnet"
+
+network.connect(NETWORK)
 ```
 
 # Account
@@ -200,18 +199,39 @@ for key, value in p.__dict__.items():
 
 
 ```python
+from brownie.network import gas_price
+from brownie.network.gas.strategies import LinearScalingStrategy
+gas_strategy = LinearScalingStrategy("60 gwei", "75 gwei", 1.1)
+
+
+gas_price(gas_strategy)
+```
+
+
+
+
+    <brownie.network.gas.strategies.LinearScalingStrategy at 0x7fb03173d730>
+
+
+
+
+```python
 from brownie import PYNFT
 
 
-pynft = PYNFT.deploy({"from": account})
+pynft = PYNFT.deploy({
+    "from": account,
+    "gas_price": gas_strategy
+})
 ```
 
-    Transaction sent: [0;1;34m0xa2a16103b7ce13a0015421ea2cfdbb3319f6617d16e65c6175a50ea57a09bfab[0;m
-      Gas price: [0;1;34m1.705944452[0;m gwei   Gas limit: [0;1;34m1419476[0;m   Nonce: [0;1;34m29[0;m
-      PYNFT.constructor confirmed   Block: [0;1;34m10057857[0;m   Gas used: [0;1;34m1290433[0;m ([0;1;34m90.91%[0;m)
-      PYNFT deployed at: [0;1;34m0xeee906fAE06C0456b57A11cBd5Cec4628fBDAAf2[0;m
-    
-
+    Transaction sent: [0;1;34m0xa5c9b02fe2dfee312bb24fee8ae1bc6edd31339ce7db97a11d40f888a5d89b16[0;m
+      Gas price: [0;1;34m60.0[0;m gwei   Gas limit: [0;1;34m1419476[0;m   Nonce: [0;1;34m11[0;m
+    Transaction sent: [0;1;34m0x2e38964cbe589ae91b5105b87f77e0b44207942a92127cb09ca155649c7f18da[0;m
+      Gas price: [0;1;34m66.0[0;m gwei   Gas limit: [0;1;34m1419476[0;m   Nonce: [0;1;34m11[0;m
+    Transaction sent: [0;1;34m0xd9e803525240d1eb6e4d3e4813a84185451f930e47df4a8c93fdb608cf3950e1[0;m
+      Gas price: [0;1;34m72.6[0;m gwei   Gas limit: [0;1;34m1419476[0;m   Nonce: [0;1;34m11[0;m
+      Waiting for confirmation... /
 
 # Upload file to IPFS
 
@@ -337,30 +357,29 @@ metadata_share_link = set_ipfs_share_link(prefix, metadata_filename)
 
 
 ```python
-PYNFT[-1].createCollectable({"from": account}).wait(1)
+PYNFT[-1].createCollectable({"from": account, "gas_limit": 100000}).wait(1)
 ```
 
-    Transaction sent: [0;1;34m0xce49cf20c4a9a7b70408ef8ccd9449ef6001c7a300f679af65d29cee4fe851f2[0;m
-      Gas price: [0;1;34m1.721482323[0;m gwei   Gas limit: [0;1;34m102072[0;m   Nonce: [0;1;34m30[0;m
-      PYNFT.createCollectable confirmed   Block: [0;1;34m10057863[0;m   Gas used: [0;1;34m92793[0;m ([0;1;34m90.91%[0;m)
-    
-      PYNFT.createCollectable confirmed   Block: [0;1;34m10057863[0;m   Gas used: [0;1;34m92793[0;m ([0;1;34m90.91%[0;m)
-    
-
+    Transaction sent: [0;1;34m0x2b0ebb107a54e1f4dd8cba236ff325f935a3b8586226002cee6dd7363ba50e7e[0;m
+      Gas price: [0;1;34m60.0[0;m gwei   Gas limit: [0;1;34m100000[0;m   Nonce: [0;1;34m12[0;m
+    Transaction sent: [0;1;34m0x3687db217fd7ba73f5666086b8d193e8afd05ea2441f025ca324f92081b29a3a[0;m
+      Gas price: [0;1;34m66.0[0;m gwei   Gas limit: [0;1;34m100000[0;m   Nonce: [0;1;34m12[0;m
+    Transaction sent: [0;1;34m0xfef11517430a4dec600cde1c9bf9a6d1c1912fab6bdc3800fad85aec3eca93fc[0;m
+      Gas price: [0;1;34m72.6[0;m gwei   Gas limit: [0;1;34m100000[0;m   Nonce: [0;1;34m12[0;m
+      Waiting for confirmation... -
 
 ## Set URI
 
 
 ```python
-PYNFT[-1].setBaseURI(metadata_share_link, {"from": account}).wait(1)
+PYNFT[-1].setBaseURI(metadata_share_link, {"from": account, "gas_limit": 120000}).wait(1)
 ```
 
-    Transaction sent: [0;1;34m0x516f50b0b592ffbfe76dbc4a91595b16bc96c40be05491444d2eeb0c8a954321[0;m
-      Gas price: [0;1;34m1.653401301[0;m gwei   Gas limit: [0;1;34m38577[0;m   Nonce: [0;1;34m32[0;m
-      PYNFT.setBaseURI confirmed   Block: [0;1;34m10057867[0;m   Gas used: [0;1;34m35070[0;m ([0;1;34m90.91%[0;m)
-    
-      PYNFT.setBaseURI confirmed   Block: [0;1;34m10057867[0;m   Gas used: [0;1;34m35070[0;m ([0;1;34m90.91%[0;m)
-    
+    Transaction sent: [0;1;34m0x944d8be4c22c3a0fc2c33403d5909f944f2dd070585571c360f2baab956484a5[0;m
+      Gas price: [0;1;34m60.0[0;m gwei   Gas limit: [0;1;34m120000[0;m   Nonce: [0;1;34m13[0;m
+    Transaction sent: [0;1;34m0x233bdd1900ea80dc6d245ee5f7be85bcbb1fa42f4ff6f328eafe1770dfc8f6ec[0;m
+      Gas price: [0;1;34m66.0[0;m gwei   Gas limit: [0;1;34m120000[0;m   Nonce: [0;1;34m13[0;m
+    This transaction already has 2 confirmations.
 
 
 
