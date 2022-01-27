@@ -406,6 +406,161 @@ PYNFT[-1].tokenCounter()
 
 
 
+# Register to Opensea
+
+
+```python
+from brownie import Contract
+import json
+
+
+with open("utils/open_sea_abi.json", "r") as open_sea_file:
+    open_sea_abi = json.load(open_sea_file)
+
+
+if NETWORK == "mainnet":
+    open_sea_address = "0xa5409ec958C83C3f309868babACA7c86DCB077c1"
+else:
+    raise NotImplementedError("We don't have contract address for this chain yet")
+    
+OpenSea = Contract.from_abi(name="OpenSea" , address=open_sea_address, abi=open_sea_abi)
+```
+
+
+```python
+gas_strategy = LinearScalingStrategy("60 gwei", "75 gwei", 1.1, time_duration=60)
+
+
+gas_price(gas_strategy)
+
+
+OpenSea.registerProxy(
+    {"from": account, "gas_price": gas_strategy, "gas_limit": 500000}
+)
+```
+
+    Transaction sent: [0;1;34m0xae7a0041ba38ae9fc24c97f87ac0efb8e00e7f45f08b88e4fed6fa7ab37806b1[0;m
+      Gas price: [0;1;34m60.0[0;m gwei   Gas limit: [0;1;34m500000[0;m   Nonce: [0;1;34m14[0;m
+    Transaction sent: [0;1;34m0x805ff82ed6ddaa950078ad42b62d077ace37ffc984e8078367dc7fb1eeefb289[0;m
+      Gas price: [0;1;34m66.0[0;m gwei   Gas limit: [0;1;34m500000[0;m   Nonce: [0;1;34m14[0;m
+    Transaction sent: [0;1;34m0x78488589de5dce5b4df59b471004f2324c01388cdcef00db56b18583d1a7537d[0;m
+      Gas price: [0;1;34m72.6[0;m gwei   Gas limit: [0;1;34m500000[0;m   Nonce: [0;1;34m14[0;m
+      Waiting for confirmation... |
+
+    Bad pipe message: %s [b'nection: Upgrade\r\nSec-WebSocket-Key: NXiTwOdunv0X6KLCjLo4Hg==\r\nSec-WebSocket-Version: 13\r\nUpgrade: websocket\r\n']
+
+
+      Waiting for confirmation... /
+
+
+    ---------------------------------------------------------------------------
+
+    KeyboardInterrupt                         Traceback (most recent call last)
+
+    Input In [75], in <module>
+          1 gas_strategy = LinearScalingStrategy("60 gwei", "75 gwei", 1.1, time_duration=60)
+          4 gas_price(gas_strategy)
+    ----> 7 OpenSea.registerProxy(
+          8     {"from": account, "gas_price": gas_strategy, "gas_limit": 500000}
+          9 )
+
+
+    File ~/miniconda3/envs/nft/lib/python3.8/site-packages/brownie/network/contract.py:1622, in ContractTx.__call__(self, *args)
+       1606 def __call__(self, *args: Tuple) -> TransactionReceiptType:
+       1607     """
+       1608     Broadcast a transaction that calls this contract method.
+       1609 
+       (...)
+       1619         Object representing the broadcasted transaction.
+       1620     """
+    -> 1622     return self.transact(*args)
+
+
+    File ~/miniconda3/envs/nft/lib/python3.8/site-packages/brownie/network/contract.py:1495, in _ContractMethod.transact(self, *args)
+       1489 if not tx["from"]:
+       1490     raise AttributeError(
+       1491         "Final argument must be a dict of transaction parameters that "
+       1492         "includes a `from` field specifying the sender of the transaction"
+       1493     )
+    -> 1495 return tx["from"].transfer(
+       1496     self._address,
+       1497     tx["value"],
+       1498     gas_limit=tx["gas"],
+       1499     gas_buffer=tx.get("gas_buffer"),
+       1500     gas_price=tx.get("gas_price"),
+       1501     max_fee=tx.get("max_fee"),
+       1502     priority_fee=tx.get("priority_fee"),
+       1503     nonce=tx["nonce"],
+       1504     required_confs=tx["required_confs"],
+       1505     data=self.encode_input(*args),
+       1506     allow_revert=tx["allow_revert"],
+       1507 )
+
+
+    File ~/miniconda3/envs/nft/lib/python3.8/site-packages/brownie/network/account.py:642, in _PrivateKeyAccount.transfer(self, to, amount, gas_limit, gas_buffer, gas_price, max_fee, priority_fee, data, nonce, required_confs, allow_revert, silent)
+        608 def transfer(
+        609     self,
+        610     to: "Account" = None,
+       (...)
+        621     silent: bool = None,
+        622 ) -> TransactionReceipt:
+        623     """
+        624     Broadcast a transaction from this account.
+        625 
+       (...)
+        639         TransactionReceipt object
+        640     """
+    --> 642     receipt, exc = self._make_transaction(
+        643         to,
+        644         amount,
+        645         gas_limit,
+        646         gas_buffer,
+        647         gas_price,
+        648         max_fee,
+        649         priority_fee,
+        650         data or "",
+        651         nonce,
+        652         "",
+        653         required_confs,
+        654         allow_revert,
+        655         silent,
+        656     )
+        658     if rpc.is_active():
+        659         undo_thread = threading.Thread(
+        660             target=Chain()._add_to_undo_buffer,
+        661             args=(
+       (...)
+        676             daemon=True,
+        677         )
+
+
+    File ~/miniconda3/envs/nft/lib/python3.8/site-packages/brownie/network/account.py:758, in _PrivateKeyAccount._make_transaction(self, to, amount, gas_limit, gas_buffer, gas_price, max_fee, priority_fee, data, nonce, fn_name, required_confs, allow_revert, silent)
+        747         revert_data = (exc.revert_msg, exc.pc, exc.revert_type)
+        749 receipt = TransactionReceipt(
+        750     txid,
+        751     self,
+       (...)
+        756     revert_data=revert_data,
+        757 )
+    --> 758 receipt = self._await_confirmation(receipt, required_confs, gas_strategy, gas_iter)
+        759 return receipt, exc
+
+
+    File ~/miniconda3/envs/nft/lib/python3.8/site-packages/brownie/network/account.py:789, in _PrivateKeyAccount._await_confirmation(self, receipt, required_confs, gas_strategy, gas_iter)
+        785     for receipt in history.filter(
+        786         sender=self, nonce=receipt.nonce, key=lambda k: k.status != -2
+        787     ):
+        788         receipt._silent = True
+    --> 789     raise exc.with_traceback(None)
+        791 if receipt.status != -2:
+        792     return receipt
+
+
+    KeyboardInterrupt: 
+
+
+Sadly, the gas price this time is too high, so I can't register Opensea for now.
+
 ## Reference
 
 * https://www.youtube.com/watch?v=M576WGiDBdQ&t=8373s
